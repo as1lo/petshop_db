@@ -1,0 +1,97 @@
+CREATE TABLE cliente 
+( 
+ cli_id INT PRIMARY KEY AUTO_INCREMENT,  
+ cli_nome VARCHAR(n) NOT NULL,  
+ cli_contato INT NOT NULL,  
+ cli_endereco VARCHAR(n) NOT NULL,  
+ cli_fk_ani_id INT NOT NULL,  
+); 
+
+CREATE TABLE animal 
+( 
+ ani_nome VARCHAR(n) NOT NULL,  
+ ani_id INT PRIMARY KEY AUTO_INCREMENT,  
+ ani_especie VARCHAR(n),  
+ ani_porte VARCHAR(n) NOT NULL,  
+ ani_nascimento INT,  
+ ani_sexo VARCHAR(n),  
+ ani_fk_ser_id INT NOT NULL,  
+ ani_castracao VARCHAR(n),  
+ ani_fk_vac_id INT NOT NULL,  
+); 
+
+CREATE TABLE vacina 
+( 
+ vac_id INT PRIMARY KEY AUTO_INCREMENT,  
+ vac_nome VARCHAR(n) NOT NULL,  
+ vac_lote INT NOT NULL,  
+ vac_validade INT NOT NULL,  
+); 
+
+CREATE TABLE servico 
+( 
+ ser_id INT PRIMARY KEY AUTO_INCREMENT,  
+ ser_tipo VARCHAR(n),  
+ ser_data DATE,  
+ ser_horario INT NOT NULL,  
+ ser_fk_ani_id INT,  
+ ser_fk_vet_id INT,  
+ ser_fk_ser_item_id INT,  
+ ser_custo FLOAT,  
+ ser_fk_id_ani INT,  
+); 
+
+CREATE TABLE servico_item 
+( 
+ ser_item_id INT PRIMARY KEY AUTO_INCREMENT,  
+ ser_item_nome VARCHAR(n) NOT NULL,  
+ ser_item_fk_ser_id INT NOT NULL,  
+ ser_item_fk_vac_id INT NOT NULL,  
+); 
+
+CREATE TABLE produto 
+( 
+ pro_id INT PRIMARY KEY AUTO_INCREMENT,  
+ pro_nome VARCHAR(n) NOT NULL,  
+); 
+
+CREATE TABLE veterinario 
+( 
+ vet_id INT PRIMARY KEY AUTO_INCREMENT,  
+ vet_especialidade VARCHAR(n) NOT NULL,  
+ vet_contato INT NOT NULL,  
+ vet_endereco VARCHAR(n) NOT NULL,  
+ vet_nome VARCHAR(n) NOT NULL,  
+); 
+
+CREATE TABLE animal_cliente 
+( 
+ ani_cli_fk_ani_id INT NOT NULL,  
+ ani_cli_fk_cli_id INT NOT NULL,  
+ ani_cli_id INT PRIMARY KEY AUTO_INCREMENT,  
+); 
+
+CREATE TABLE forma_pagamento 
+( 
+ pag_id INT PRIMARY KEY AUTO_INCREMENT,  
+ pag_nome VARCHAR(n) NOT NULL,  
+); 
+
+CREATE TABLE recebimento 
+( 
+ rec_fk_ser INT,  
+ rec_id INT PRIMARY KEY AUTO_INCREMENT,  
+ rec_fk_pag INT,  
+ rec_data INT NOT NULL,  
+ rec_valor FLOAT NOT NULL,  
+); 
+
+ALTER TABLE cliente ADD FOREIGN KEY(cli_fk_ani_id) REFERENCES animal (cli_fk_ani_id)
+ALTER TABLE animal ADD FOREIGN KEY(ani_fk_ser_id) REFERENCES servico (ani_fk_ser_id)
+ALTER TABLE animal ADD FOREIGN KEY(ani_fk_vac_id) REFERENCES vacina (ani_fk_vac_id)
+ALTER TABLE servico_item ADD FOREIGN KEY(ser_item_fk_ser_id) REFERENCES servico (ser_item_fk_ser_id)
+ALTER TABLE servico_item ADD FOREIGN KEY(ser_item_fk_vac_id) REFERENCES vacina (ser_item_fk_vac_id)
+ALTER TABLE animal_cliente ADD FOREIGN KEY(ani_cli_fk_ani_id) REFERENCES cliente (ani_cli_fk_ani_id)
+ALTER TABLE animal_cliente ADD FOREIGN KEY(ani_cli_fk_cli_id) REFERENCES cliente (ani_cli_fk_cli_id)
+ALTER TABLE recebimento ADD FOREIGN KEY(rec_fk_ser) REFERENCES servico (rec_fk_ser)
+ALTER TABLE recebimento ADD FOREIGN KEY(rec_fk_pag) REFERENCES cliente (rec_fk_pag)
